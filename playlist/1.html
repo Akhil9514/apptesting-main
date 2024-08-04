@@ -2,6 +2,32 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Unity WebView</title>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('youtube-iframe', {
+          events: {
+            'onStateChange': onPlayerStateChange,
+            'onReady': onPlayerReady
+          }
+        });
+      }
+
+      function onPlayerReady(event) {
+        if (typeof Unity !== 'undefined' && Unity.call) {
+          Unity.call('iframe_loaded');
+        }
+      }
+
+      function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.ENDED) {
+          if (typeof Unity !== 'undefined' && Unity.call) {
+            Unity.call('video_ended');
+          }
+        }
+      }
+    </script>
   </head>
   <body>
     <style>
@@ -16,13 +42,5 @@
     <!-- <iframe class="rotated-iframe" src="https://www.youtube.com/embed/hz1xxKz9Gk8?si=QrpH8pzxI3q5b91p&amp;controls=0&amp;start=0&amp;&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
 
     <iframe id="youtube-iframe" width="100%" height="100%" src="https://www.youtube.com/embed/2GWeCMXGyKI?si=fJhwF9zRrrB4qxuO&amp;controls=0&amp;start=0&amp;&autoplay=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-    <script>
-      document.getElementById('youtube-iframe').onload = function() {
-        if (typeof Unity !== 'undefined' && Unity.call) {
-          Unity.call('iframe_loaded');
-        }
-      };
-    </script>
   </body>
 </html>
