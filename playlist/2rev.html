@@ -1,46 +1,81 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <iframe width="100%" height="720px" src="https://www.youtube.com/embed/l-XOO068DqA?si=FlhzXHAzClDyij-H&amp;controls=0&amp;start=0&amp;&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/s-bZD3O3P80?si=pGj0XpNHpoiVpJPJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
-<!-- </body>
-</html> -->
 
 
-
-
+<!DOCTYPE html>
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Unity WebView</title>
-  </head>
-  <body>
     <style>
-      .rotated-iframe {
-          width: 1920px;
-          height: 1080px;
-          transform: rotate(180deg); /* Adjust the angle as needed */
-          transform-origin: center; /* Rotate around the center */
-          border: none;
+      body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #player {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        transform: rotate(180deg); /* Rotate the iframe by 180 degrees */
+        transform-origin: center;
+      }
+      .player-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
       }
     </style>
-    <iframe id="youtube-iframe" class="rotated-iframe" src="https://www.youtube.com/embed/35KDnej1hlI?si=BUk5EiOTXz8Ec6Xy&amp;controls=0&amp;start=0&amp;&autoplay=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-    <!-- <iframe id="youtube-iframe" width="100%" height="100%" src="https://www.youtube.com/embed/2GWeCMXGyKI?si=fJhwF9zRrrB4qxuO&amp;controls=0&amp;start=0&amp;&autoplay=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
+  </head>
+  <body>
+    <div id="player" class="player-container"></div>
 
     <script>
-      document.getElementById('youtube-iframe').onload = function() {
+      // 2. This code loads the IFrame Player API code asynchronously.
+      var tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          videoId: 'rolegGb6VM8', // Replace this with your video ID
+          playerVars: {
+            'playsinline': 1,
+            'controls': 0,
+            'autoplay': 1
+          },
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      }
+
+      // 4. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
         if (typeof Unity !== 'undefined' && Unity.call) {
           Unity.call('iframe_loaded');
         }
-      };
+        event.target.playVideo();
+      }
+
+      // 5. The API calls this function when the player's state changes.
+      function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.ENDED) {
+          if (typeof Unity !== 'undefined' && Unity.call) {
+            Unity.call('video_ended');
+          }
+        }
+      }
     </script>
   </body>
 </html>
+
 
