@@ -35,10 +35,7 @@
     </style>
   </head>
   <body>
-    <div id="player" class="player-container">
-      <!-- Insert your iframe element here -->
-      <iframe id="youtube-iframe" src="https://www.youtube.com/embed/sxAAL6-XYBs" frameborder="0" allowfullscreen></iframe>
-    </div>
+    <div id="player" class="player-container"></div>
 
     <script>
       // 2. This code loads the IFrame Player API code asynchronously.
@@ -51,7 +48,8 @@
       //    after the API code downloads.
       var player;
       function onYouTubeIframeAPIReady() {
-        player = new YT.Player('youtube-iframe', {
+        player = new YT.Player('player', {
+          videoId: 'sxAAL6-XYBs', // Replace this with your video ID
           playerVars: {
             'playsinline': 1,
             'controls': 0,
