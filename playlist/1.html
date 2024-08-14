@@ -96,6 +96,13 @@
         }, 1000); // Check every second
     }
 
+    // Function to pause the video
+    function pauseVideo() {
+        if (player && player.pauseVideo) {
+          player.pauseVideo();
+        }
+      }
+
     </script>
   </body>
 </html>
