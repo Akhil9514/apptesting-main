@@ -66,6 +66,7 @@
         }
         // Uncomment the next line if you want the video to play automatically when ready.
         // event.target.playVideo();
+        monitorIframeUrlChange(); // Start monitoring the iframe's URL changes
       }
 
       // The API calls this function when the player's state changes.
@@ -76,6 +77,25 @@
           }
         }
       }
+
+          // Function to monitor iframe URL changes
+    function monitorIframeUrlChange() {
+        var iframe = document.getElementById('player');
+        var lastUrl = iframe.src;
+
+        setInterval(function() {
+            if (iframe.src !== lastUrl) {
+                lastUrl = iframe.src;
+                // Send a message to Unity when the URL changes
+                if (lastUrl.includes('youtube.com')) {
+                    if (typeof Unity !== 'undefined' && Unity.call) {
+                        Unity.call('youtube_redirected');
+                    }
+                }
+            }
+        }, 1000); // Check every second
+    }
+
     </script>
   </body>
 </html>
